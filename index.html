@@ -3,138 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Wild Canvas</title>
-<meta name="description" content="Wild Canvas — custom hand-painted sneakers, bags &amp; apparel. Your sole, our canvas.">
+<title>Wild Canvas | Hand-painted sneakers, bags, tees &amp; more in Bahrain</title>
+<meta name="description" content="Wild Canvas hand-paints sneakers, bags, tees, hoodies, passport covers and more in Bahrain. Send us your idea on WhatsApp and we'll paint it.">
+<meta name="theme-color" content="#110D0B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wild Canvas | Plain is just unfinished.">
+<meta property="og:description" content="Custom hand-painted sneakers, bags, tees, hoodies and more in Bahrain. Send us your idea on WhatsApp.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Permanent+Marker&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root{
+    --black:#110D0B;
     --wall:#1A1510;
     --wall-2:#211B14;
-    --black:#110D0B;
     --cream:#F2EEE6;
     --cream-dim:#C2B8A6;
-    --blue:#2E6CFF;
-    --orange:#FF6B1A;
+    --blue:#296BFE;
+    --orange:#F4651D;
     --line:#3A3024;
+    --display:'Archivo Black','Arial Black',Impact,sans-serif;
+    --marker:'Permanent Marker','Comic Sans MS',cursive;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; scroll-padding-top:90px;}
   body{
     background:var(--black);
     color:var(--cream);
     font-family:'Inter',system-ui,sans-serif;
     overflow-x:hidden;
-    cursor:none;
+    -webkit-font-smoothing:antialiased;
   }
   ::selection{background:var(--orange); color:var(--black);}
-  img, canvas, svg{max-width:100%; display:block;}
+  img, svg{max-width:100%; display:block;}
   a{color:inherit; text-decoration:none;}
+  a:focus-visible, .btn:focus-visible{outline:3px solid var(--cream); outline-offset:3px;}
 
-  /* ===== grain + grime overlay, applied globally ===== */
+  /* grain and vignette over everything */
   body::before{
     content:'';
     position:fixed; inset:0; z-index:1000; pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity:0.14;
+    opacity:0.12;
     mix-blend-mode:overlay;
   }
   body::after{
     content:'';
     position:fixed; inset:0; z-index:999; pointer-events:none;
-    background:radial-gradient(ellipse 120% 90% at 50% 0%, transparent 50%, rgba(0,0,0,0.55) 100%);
+    background:radial-gradient(ellipse 130% 100% at 50% 40%, transparent 62%, rgba(0,0,0,0.42) 100%);
   }
 
-  /* ===== custom cursor: paint drip ===== */
+  /* paint-drip cursor, mouse devices only */
   #cursor-dot{
     position:fixed; top:0; left:0; width:12px; height:12px; border-radius:50% 50% 50% 0;
     background:var(--orange); pointer-events:none; z-index:9999;
-    transform:translate(-50%,-50%) rotate(45deg); mix-blend-mode:screen;
+    transform:translate(-50%,-50%) rotate(45deg); mix-blend-mode:screen; display:none;
   }
   .cursor-drip{
     position:fixed; top:0; left:0; width:6px; height:6px; border-radius:50% 50% 50% 0;
     pointer-events:none; z-index:9997; opacity:.6;
   }
-  @media (hover:none){
-    body{cursor:auto;}
-    #cursor-dot{display:none;}
+  @media (hover:hover) and (pointer:fine){
+    body, a{cursor:none;}
+    #cursor-dot{display:block;}
   }
 
   .wrap{max-width:1280px; margin:0 auto; padding-inline:clamp(20px,5vw,64px); position:relative; z-index:2;}
   section{position:relative;}
 
   h1,h2,h3{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-weight:400;
+    font-family:var(--display); font-weight:400;
     line-height:0.95;
     letter-spacing:-0.005em;
     text-transform:uppercase;
   }
 
+  /* spray-warp headline look */
+  .spray{position:relative; display:inline-block; filter:url(#roughen);}
+  .spray.c-blue{color:var(--blue); text-shadow:3px 4px 0 rgba(0,0,0,0.55), -2px 0 0 rgba(255,107,26,0.25);}
+  .spray.c-orange{color:var(--orange); text-shadow:3px 4px 0 rgba(0,0,0,0.55), -2px 0 0 rgba(46,108,255,0.25);}
+  .spray.c-cream{color:var(--cream); text-shadow:3px 4px 0 rgba(0,0,0,0.6);}
+
   .tag{
     display:inline-flex; align-items:center; gap:8px;
     font-size:13px; font-weight:600; color:var(--cream-dim);
-    text-transform:none;
   }
   .tag .sw{width:7px;height:7px;border-radius:50%;background:var(--orange);flex:none;}
 
-  /* ===== spray-stencil text treatment for big headlines ===== */
-  .spray{
-    position:relative;
-    display:inline-block;
-    filter:url(#roughen);
+  /* buttons: flat and rounded, like the call-to-action card on our posts */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:11px;
+    font-family:var(--display); font-weight:400;
+    font-size:14px; letter-spacing:0.04em; text-transform:uppercase;
+    padding:17px 30px; border-radius:0; border:2px solid transparent;
+    transform:rotate(-0.8deg); box-shadow:4px 4px 0 rgba(0,0,0,0.55);
+    transition:transform .15s ease, box-shadow .15s ease;
   }
-  .spray.c-blue{ color:var(--blue); text-shadow: 3px 4px 0 rgba(0,0,0,0.55), -2px 0 0 rgba(255,107,26,0.25); }
-  .spray.c-orange{ color:var(--orange); text-shadow: 3px 4px 0 rgba(0,0,0,0.55), -2px 0 0 rgba(46,108,255,0.25); }
-  .spray.c-cream{ color:var(--cream); text-shadow: 3px 4px 0 rgba(0,0,0,0.6); }
+  .btn svg{width:22px; height:22px; flex:none;}
+  .btn:hover{transform:rotate(0deg) translateY(-2px); box-shadow:6px 6px 0 rgba(0,0,0,0.55);}
+  .btn-orange{background:var(--orange); color:var(--black);}
+  .btn-dark{background:var(--black); color:var(--cream); transform:rotate(0.8deg); box-shadow:4px 4px 0 rgba(0,0,0,0.3);}
+  .btn-line{border-color:var(--cream); color:var(--cream); box-shadow:none;}
 
   /* ===== nav ===== */
   nav{
     position:fixed; top:0; left:0; right:0; z-index:500;
     display:flex; align-items:center; justify-content:space-between;
-    padding:20px clamp(20px,5vw,64px);
-    background:linear-gradient(to bottom, rgba(17,13,11,0.94), rgba(17,13,11,0));
+    padding:14px clamp(20px,5vw,64px);
+    background:linear-gradient(to bottom, rgba(17,13,11,0.95), rgba(17,13,11,0));
     pointer-events:none;
   }
   nav *{pointer-events:auto;}
+  .brand{display:block; line-height:0;}
+  .brand img{height:clamp(44px,5.4vw,60px); width:auto;}
   .wordmark{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-size:19px; letter-spacing:0.01em; text-transform:uppercase;
-    filter:url(#roughen-sm);
+    font-family:var(--display); font-weight:400; font-size:19px; letter-spacing:0.02em; filter:url(#roughen-sm);
+    text-transform:uppercase; line-height:1;
   }
   .wordmark span{color:var(--blue);}
-  .nav-cta{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-size:12.5px; letter-spacing:0.03em; text-transform:uppercase;
-    padding:11px 20px; background:var(--orange); color:var(--black);
-    transform:rotate(-1deg);
-    box-shadow:3px 3px 0 rgba(0,0,0,0.5);
-    transition:transform .15s ease;
-  }
-  .nav-cta:hover{transform:rotate(-1deg) translateY(-2px);}
+  nav .btn{font-size:12.5px; padding:11px 20px; transform:rotate(-1deg); box-shadow:3px 3px 0 rgba(0,0,0,0.5);}
 
   /* ===== hero ===== */
   .hero{
     min-height:100vh;
     display:flex; align-items:center;
-    padding-top:100px;
+    padding-top:110px; padding-bottom:40px;
     background:
-      radial-gradient(ellipse 70% 55% at 85% 20%, rgba(46,108,255,0.16), transparent 65%),
-      radial-gradient(ellipse 60% 50% at 15% 85%, rgba(255,107,26,0.14), transparent 65%),
+      radial-gradient(ellipse 70% 55% at 85% 20%, rgba(41,107,254,0.18), transparent 65%),
+      radial-gradient(ellipse 60% 50% at 15% 85%, rgba(244,101,29,0.15), transparent 65%),
       repeating-linear-gradient(115deg, rgba(0,0,0,0.12) 0px, rgba(0,0,0,0.12) 2px, transparent 2px, transparent 7px),
       linear-gradient(160deg, var(--wall-2), var(--wall) 55%, #161008 100%);
     border-bottom:1px solid var(--line);
   }
   .hero-grid{
-    display:grid; grid-template-columns:1.1fr 0.9fr; gap:20px; align-items:center;
+    display:grid; grid-template-columns:1fr; gap:32px; align-items:center;
     width:100%;
   }
+  .hero-grid.has-photo{grid-template-columns:1.3fr 0.7fr;}
   .hero-copy{opacity:0; transform:translateY(24px);}
-  .eyebrow-row{display:flex; align-items:center; gap:14px; margin-bottom:24px; flex-wrap:wrap;}
-  .eyebrow-row .pipe{color:var(--line);}
   h1.hero-h{
-    font-size:clamp(50px, 7.8vw, 112px);
+    font-size:clamp(40px, 6.2vw, 90px);
     margin-bottom:28px;
   }
   h1.hero-h .ln{display:block;}
@@ -142,188 +154,168 @@
     font-size:clamp(16px,1.6vw,19px);
     color:var(--cream-dim);
     max-width:46ch;
-    line-height:1.55;
-    margin-bottom:38px;
+    line-height:1.6;
+    margin-bottom:36px;
   }
-  .hero-ctas{display:flex; align-items:center; gap:24px; flex-wrap:wrap;}
-  .btn-primary{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-size:14px; letter-spacing:0.02em; text-transform:uppercase;
-    background:var(--orange); color:var(--black);
-    padding:17px 30px;
-    display:inline-flex; align-items:center; gap:10px;
-    transform:rotate(-0.8deg);
-    box-shadow:4px 4px 0 rgba(0,0,0,0.55);
-    transition:transform .15s ease, box-shadow .15s ease;
-  }
-  .btn-primary:hover{transform:rotate(-0.8deg) translate(-2px,-2px); box-shadow:6px 6px 0 rgba(0,0,0,0.55);}
+  .hero-ctas{display:flex; align-items:center; gap:26px; flex-wrap:wrap;}
   .btn-ghost{
-    font-size:14.5px; font-weight:600; color:var(--cream);
-    border-bottom:1.5px dashed var(--blue); padding-bottom:3px;
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:var(--marker); font-size:22px; color:var(--cream);
+    transform:rotate(-2deg); padding:6px 2px;
   }
+  .btn-ghost svg{width:44px; height:36px; color:var(--orange); flex:none; transition:transform .25s ease;}
+  .btn-ghost:hover svg{transform:translate(3px,6px);}
+  .btn-ghost:hover{color:var(--orange);}
 
   .hero-stage{
     position:relative;
-    height:min(560px, 68vh);
+    width:100%; max-width:470px; aspect-ratio:4/5; margin-inline:auto;
     opacity:0;
-    display:flex; align-items:center; justify-content:center;
+    display:none; align-items:center; justify-content:center;
   }
-  .tag-mark{ width:100%; height:100%; max-width:520px; }
-  .drip{ animation: dripFall 5.5s ease-in infinite; transform-origin:top center; }
-  .drip.d1{ animation-delay:0s; }
-  .drip.d2{ animation-delay:1.4s; }
-  .drip.d3{ animation-delay:2.7s; }
-  .drip.d4{ animation-delay:0.8s; }
-  @keyframes dripFall{
-    0%{ transform:scaleY(1); opacity:0.95; }
-    75%{ transform:scaleY(1.35); opacity:0.5; }
-    100%{ transform:scaleY(1.35); opacity:0; }
+  .has-photo .hero-stage{display:flex;}
+  .hero-photo{
+    position:absolute; inset:0; width:100%; height:100%;
+    object-fit:cover; border-radius:0; border:2px solid var(--line); box-shadow:6px 6px 0 rgba(0,0,0,0.5);
   }
 
   /* ===== marquee ===== */
+  .marquee-wrap{overflow:hidden; padding:16px 0; background:var(--black); position:relative; z-index:3;}
   .marquee-strip{
     background:var(--cream); color:var(--black);
-    padding:20px 0; overflow:hidden; white-space:nowrap;
+    padding:16px 0; overflow:hidden; white-space:nowrap;
     border-top:4px solid var(--black); border-bottom:4px solid var(--black);
     transform:rotate(-0.6deg) scale(1.02);
   }
-  .marquee-track{display:inline-flex; animation:scroll-left 26s linear infinite;}
+  .marquee-track{display:inline-flex; animation:scroll-left 34s linear infinite;}
   .marquee-track span{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-size:clamp(20px,3vw,32px); text-transform:uppercase;
+    font-family:var(--display); font-weight:400;
+    font-size:clamp(20px,3vw,32px); text-transform:uppercase; letter-spacing:0;
     padding-inline:28px; display:inline-flex; align-items:center; gap:28px;
   }
   .marquee-track span.m-blue{color:var(--blue);}
   .marquee-track span.m-orange{color:var(--orange);}
   .marquee-track .dot{width:9px; height:9px; border-radius:50%; background:var(--black); display:inline-block;}
-  @keyframes scroll-left{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @keyframes scroll-left{from{transform:translateX(0);} to{transform:translateX(-50%);}}
 
   /* ===== how it works ===== */
   .how{padding:130px 0 100px;}
-  .how-head{max-width:640px; margin-bottom:76px;}
-  .how-head h2{font-size:clamp(36px,5.2vw,58px); margin-bottom:18px;}
-  .how-head p{color:var(--cream-dim); font-size:17px; line-height:1.6; max-width:52ch;}
-  .how-steps{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:0;
-    border-top:2px solid var(--line);
+  .how-head{max-width:640px; margin-bottom:70px;}
+  .how-head h2{font-size:clamp(36px,5.2vw,58px); margin-bottom:20px;}
+  .how-head p{color:var(--cream-dim); font-size:17px; line-height:1.6; max-width:48ch;}
+  .flow{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; position:relative;}
+  .flow::before{content:''; position:absolute; top:38px; left:12.5%; right:12.5%; border-top:3px dashed var(--line);}
+  .flow-line{
+    position:absolute; top:35px; left:12.5%; right:12.5%; height:7px; border-radius:4px;
+    background:linear-gradient(90deg,var(--orange),var(--blue));
+    transform:scaleX(0); transform-origin:left;
+    transition:transform 2.4s cubic-bezier(.5,0,.25,1) .3s;
   }
-  .how-step{
-    padding:40px 28px 0 0;
-    border-right:2px dashed var(--line);
-    position:relative;
+  .flow.go .flow-line{transform:scaleX(1);}
+  .flow-step{position:relative; text-align:center; padding:0 4px; opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease;}
+  .flow.go .flow-step{opacity:1; transform:none;}
+  .flow.go .flow-step:nth-child(2){transition-delay:.2s;}
+  .flow.go .flow-step:nth-child(3){transition-delay:.85s;}
+  .flow.go .flow-step:nth-child(4){transition-delay:1.5s;}
+  .flow.go .flow-step:nth-child(5){transition-delay:2.15s;}
+  .node{
+    position:relative; z-index:2; width:76px; height:76px; border-radius:50%; margin:0 auto 24px;
+    display:grid; place-items:center;
+    background:var(--black); color:var(--cream); border:3px solid var(--cream);
+    box-shadow:4px 4px 0 rgba(0,0,0,0.55);
   }
-  .how-step:last-child{border-right:none;}
-  .how-step:nth-child(2){padding-top:94px;}
-  .how-step:nth-child(3){padding-top:40px;}
-  .step-num{
-    font-family:'Permanent Marker',cursive;
-    font-size:26px; color:var(--orange); margin-bottom:18px; display:block;
-    transform:rotate(-3deg); transform-origin:left;
+  .node svg{width:34px; height:34px;}
+  .node.hot{background:var(--orange); color:var(--black); border-color:var(--black);}
+  .node i{
+    position:absolute; top:-10px; right:-10px; width:28px; height:28px; border-radius:50%;
+    background:var(--blue); color:var(--cream); border:2px solid var(--black);
+    display:grid; place-items:center; font-style:normal; font-family:var(--marker); font-size:15px; line-height:1;
   }
-  .how-step h3{font-size:24px; margin-bottom:14px; text-transform:none;}
-  .how-step p{color:var(--cream-dim); font-size:15.5px; line-height:1.6; max-width:30ch;}
+  .flow.go .node.hot svg{animation:wiggle 1.1s ease-in-out 2.4s infinite; transform-origin:80% 20%;}
+  @keyframes wiggle{0%,100%{transform:rotate(-10deg);} 50%{transform:rotate(14deg);}}
+  .flow-step h3{font-size:22px; text-transform:none; line-height:1.1; margin-bottom:10px;}
+  .flow-step p{color:var(--cream-dim); font-size:15.5px; line-height:1.55; max-width:26ch; margin-inline:auto;}
+  .days{
+    display:inline-block; margin-top:14px; font-family:var(--marker); font-size:16px;
+    background:var(--orange); color:var(--black); padding:3px 12px; transform:rotate(-2deg);
+  }
 
   /* ===== services ===== */
-  .services{padding:40px 0 60px;}
+  .services{padding:30px 0 40px;}
   .svc-row{
-    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
-    padding:76px 0; border-bottom:2px dashed var(--line);
+    display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;
+    padding:72px 0; border-bottom:2px dashed var(--line);
   }
   .svc-row:first-child{border-top:2px dashed var(--line);}
   .svc-row:nth-child(even) .svc-media{order:2;}
   .svc-media{
-    aspect-ratio:4/3; overflow:hidden;
+    aspect-ratio:4/3; position:relative; overflow:hidden;
+    border-radius:0; border:2px solid var(--line); box-shadow:6px 6px 0 rgba(0,0,0,0.5);
     background:
-      repeating-linear-gradient(135deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 2px, transparent 2px, transparent 9px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cpath d='M-20 190 C90 150 200 200 420 120' stroke='%23F4651D' stroke-width='44' stroke-linecap='round' fill='none' opacity='.9'/%3E%3Cpath d='M-20 245 C110 205 220 250 420 175' stroke='%23296BFE' stroke-width='40' stroke-linecap='round' fill='none' opacity='.9'/%3E%3C/svg%3E") center/cover no-repeat,
       linear-gradient(135deg, #241C13, #171209);
-    display:flex; align-items:center; justify-content:center;
-    position:relative; border:2px solid var(--line);
-    transform:rotate(-0.5deg);
   }
-  .svc-row:nth-child(even) .svc-media{ transform:rotate(0.5deg); }
-  .svc-media .ph-label{
-    font-size:12px; font-weight:700; color:var(--cream-dim);
-    text-transform:uppercase; letter-spacing:0.06em;
-    border:1px dashed var(--line); padding:9px 16px;
-    background:rgba(17,13,11,0.6);
-  }
+  .svc-media img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
   .svc-copy .tag{margin-bottom:18px;}
-  .svc-copy h3{font-size:clamp(28px,3.6vw,40px); margin-bottom:16px; text-transform:none;}
-  .svc-copy p{color:var(--cream-dim); font-size:16px; line-height:1.65; max-width:42ch; margin-bottom:22px;}
-  .svc-price{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-size:15px; color:var(--cream);
-  }
-  .svc-price span{color:var(--blue);}
+  .svc-copy h3{font-size:clamp(28px,3.6vw,40px); text-transform:none; margin-bottom:18px; line-height:1.02;}
+  .svc-copy p{color:var(--cream-dim); font-size:16.5px; line-height:1.65; max-width:42ch; margin-bottom:24px;}
+  .btn-sm{font-size:12px; padding:14px 22px; gap:9px;}
+  .btn-sm svg{width:18px; height:18px;}
 
   /* ===== pricing ===== */
-  .pricing{padding:110px 0 120px;}
-  .pricing-head{margin-bottom:60px; max-width:600px;}
-  .pricing-head h2{font-size:clamp(36px,5.2vw,58px); margin-bottom:18px;}
-  .pricing-head p{color:var(--cream-dim); font-size:17px; max-width:50ch; line-height:1.6;}
-  .price-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  .price-card{
-    border:2px solid var(--line); padding:36px 28px;
-    background:linear-gradient(160deg, #221A12, #171209);
-    display:flex; flex-direction:column; min-height:100%;
+  .pricing{padding:90px 0 120px;}
+  .price-grid{
+    display:grid; grid-template-columns:0.9fr 1.1fr; gap:clamp(32px,6vw,90px); align-items:center;
   }
-  .price-card.anchor{
-    background:var(--orange); color:var(--black); border-color:var(--black);
-    transform:rotate(-1deg) translateY(-14px);
-    box-shadow:6px 6px 0 rgba(0,0,0,0.5);
+  .price-tag{
+    background:var(--orange); color:var(--black);
+    border-radius:0; border:2px solid var(--black); box-shadow:6px 6px 0 rgba(0,0,0,0.55);
+    padding:clamp(34px,5vw,56px) clamp(28px,4vw,48px);
+    transform:rotate(-1.2deg);
   }
-  .price-card .p-name{font-family:'Permanent Marker',cursive; font-size:20px; margin-bottom:6px; opacity:.9;}
-  .price-card .p-amount{font-family:'Archivo Black',system-ui,sans-serif; font-size:40px; margin-bottom:22px;}
-  .price-card .p-amount small{font-size:16px; font-weight:400; opacity:.65;}
-  .price-card ul{list-style:none; flex:1; margin-bottom:28px;}
-  .price-card li{
-    font-size:14.5px; padding:10px 0; border-top:1px dashed rgba(255,255,255,0.12);
-    display:flex; gap:10px;
+  .price-tag small{
+    display:block; font-family:var(--marker); font-size:clamp(22px,2.6vw,30px);
+    letter-spacing:0.02em; text-transform:uppercase; margin-bottom:6px;
   }
-  .price-card.anchor li{border-top:1px dashed rgba(0,0,0,0.18);}
-  .price-card li::before{content:'—'; opacity:.5; flex:none;}
-  .price-card .p-cta{
-    font-size:13.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.02em;
-    text-align:center; padding:13px;
-    border:2px solid var(--cream);
+  .price-tag strong{
+    display:block; font-family:var(--display); font-weight:400; text-transform:uppercase;
+    font-size:clamp(54px,6.4vw,90px); line-height:0.95; white-space:nowrap;
   }
-  .price-card.anchor .p-cta{background:var(--black); color:var(--cream); border-color:var(--black);}
+  .price-tag span{display:block; margin-top:18px; font-size:15px; font-weight:600; line-height:1.45; max-width:30ch;}
+  .price-copy h2{font-size:clamp(36px,5.2vw,58px); margin-bottom:18px;}
+  .price-copy > p{color:var(--cream-dim); font-size:17px; line-height:1.6; max-width:48ch; margin-bottom:30px;}
+  .factors{list-style:none; margin-bottom:34px; border-top:2px dashed var(--line);}
+  .factors li{
+    display:grid; grid-template-columns:110px 1fr; gap:18px; align-items:baseline;
+    padding:18px 0; border-bottom:2px dashed var(--line);
+  }
+  .factors b{font-family:var(--marker); font-size:26px; text-transform:none; color:var(--blue); line-height:1;}
+  .factors span{color:var(--cream-dim); font-size:15.5px; line-height:1.55;}
 
   /* ===== contact ===== */
   .contact{
-    background:linear-gradient(135deg, var(--blue), #1842C4 70%);
+    background:linear-gradient(135deg, var(--blue), #1B4FD6 75%);
     color:var(--cream);
-    padding:130px 0;
+    padding:120px 0;
     position:relative; overflow:hidden;
     border-top:4px solid var(--black);
   }
   .contact::before{
     content:''; position:absolute; top:-30%; right:-8%; width:55%; height:160%;
-    background:radial-gradient(circle, rgba(255,107,26,0.4), transparent 65%);
+    background:radial-gradient(circle, rgba(244,101,29,0.42), transparent 65%);
     pointer-events:none;
   }
   .contact::after{
-    content:'';
-    position:absolute; inset:0;
-    background-image:repeating-linear-gradient(100deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 8px);
+    content:''; position:absolute; inset:0;
+    background-image:repeating-linear-gradient(100deg, rgba(0,0,0,0.09) 0px, rgba(0,0,0,0.09) 2px, transparent 2px, transparent 8px);
     pointer-events:none;
   }
-  .contact-inner{position:relative; z-index:2; max-width:820px;}
-  .contact h2{font-size:clamp(40px,6.8vw,88px); margin-bottom:28px;}
-  .contact p{font-size:18px; max-width:48ch; line-height:1.6; margin-bottom:40px; color:rgba(242,238,230,0.9);}
-  .contact-row{display:flex; gap:22px; flex-wrap:wrap; align-items:center;}
-  .btn-dark{
-    font-family:'Archivo Black',system-ui,sans-serif;
-    font-size:14px; letter-spacing:0.02em; text-transform:uppercase;
-    background:var(--black); color:var(--cream);
-    padding:18px 32px;
-    transform:rotate(0.8deg);
-    box-shadow:4px 4px 0 rgba(0,0,0,0.3);
-    transition:transform .15s ease;
-  }
-  .btn-dark:hover{transform:rotate(0.8deg) translateY(-2px);}
-  .contact-meta{font-size:14.5px; color:rgba(242,238,230,0.78);}
+  .contact-inner{position:relative; z-index:2; max-width:860px;}
+  .contact h2{font-size:clamp(40px,6.8vw,88px); margin-bottom:26px;}
+  .contact p{font-size:18px; max-width:46ch; line-height:1.6; margin-bottom:38px; color:rgba(242,238,230,0.92);}
+  .contact-row{display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-bottom:26px;}
 
+  footer a:hover{color:var(--cream);}
   footer{
     padding:34px clamp(20px,5vw,64px);
     display:flex; justify-content:space-between; align-items:center;
@@ -333,128 +325,155 @@
   }
 
   @media (max-width:860px){
-    .hero-grid{grid-template-columns:1fr; text-align:left;}
-    .hero-stage{height:320px; order:-1;}
-    .how-steps{grid-template-columns:1fr;}
-    .how-step{border-right:none; border-bottom:2px dashed var(--line); padding:32px 0 32px !important;}
-    .how-step:last-child{border-bottom:none;}
-    .svc-row{grid-template-columns:1fr; gap:28px;}
+    html{scroll-padding-top:76px;}
+    .hero{padding-top:96px;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-stage{order:-1; aspect-ratio:4/3; max-width:none;}
+    .hero-grid.has-photo{grid-template-columns:1fr;}
+      .how{padding:90px 0 60px;}
+    .how-head{margin-bottom:48px;}
+    .how-head h2{font-size:clamp(28px,8vw,36px);}
+    .flow{grid-template-columns:1fr; gap:36px;}
+    .flow::before, .flow-line{display:none;}
+    .flow-step{display:grid; grid-template-columns:76px 1fr; column-gap:20px; text-align:left; align-items:start;}
+    .flow-step > :not(.node){grid-column:2;}
+    .node{margin:0; grid-row:1 / span 4;}
+    .flow-step h3{font-size:21px; padding-top:4px;}
+    .flow-step p{margin:0; max-width:none;}
+    .days{justify-self:start;}
+    .flow-step:not(:last-child)::after{
+      content:''; position:absolute; left:35px; top:80px; bottom:-34px; width:6px; border-radius:3px;
+      background:linear-gradient(180deg,var(--orange),var(--blue));
+      transform:scaleY(0); transform-origin:top; transition:transform .7s ease .5s;
+    }
+    .flow.go .flow-step:not(:last-child)::after{transform:scaleY(1);}
+    .flow.go .flow-step:nth-child(3)::after{transition-delay:1.15s;}
+    .flow.go .flow-step:nth-child(4)::after{transition-delay:1.8s;}
+    .svc-row{grid-template-columns:1fr; gap:26px; padding:52px 0;}
     .svc-row:nth-child(even) .svc-media{order:0;}
+    .pricing{padding:60px 0 80px;}
     .price-grid{grid-template-columns:1fr;}
-    .price-card.anchor{transform:none; box-shadow:none;}
+    .factors li{grid-template-columns:90px 1fr; gap:14px;}
+    .contact{padding:80px 0;}
+  }
+  @media (max-width:420px){
+    nav .btn{font-size:15px; padding:10px 14px;}
+    .btn{font-size:18px; padding:14px 22px;}
+    .contact-row .btn{width:100%;}
+    .hero-ctas .btn{width:100%;}
+    .btn-sm{font-size:12px; padding:14px 18px;}
   }
 
   @media (prefers-reduced-motion: reduce){
     .hero-copy, .hero-stage{opacity:1 !important; transform:none !important;}
-    .marquee-track, .drip{animation:none;}
+    .marquee-track{animation:none;}
+    .flow-step{opacity:1 !important; transform:none !important; transition:none !important;}
+    .flow-line{transform:none !important; transition:none !important;}
+    .flow-step::after{transform:scaleY(1) !important; transition:none !important;}
+    .node svg{animation:none !important;}
     html{scroll-behavior:auto;}
   }
 </style>
+<noscript><style>.hero-copy,.hero-stage{opacity:1 !important; transform:none !important;} .flow-step{opacity:1 !important; transform:none !important;} .flow-line{transform:none !important;} .flow-step::after{transform:scaleY(1) !important;}</style></noscript>
 </head>
-<body>
+<body id="top">
 
-<svg width="0" height="0" style="position:absolute">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
   <filter id="roughen" x="-20%" y="-20%" width="140%" height="140%">
     <feTurbulence type="fractalNoise" baseFrequency="0.012 0.06" numOctaves="2" seed="7" result="noise"/>
     <feDisplacementMap in="SourceGraphic" in2="noise" scale="9"/>
   </filter>
-  <filter id="roughen-sm" x="-20%" y="-20%" width="140%" height="140%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.04 0.12" numOctaves="2" seed="3" result="n2"/>
-    <feDisplacementMap in="SourceGraphic" in2="n2" scale="2.4"/>
+  <filter id="roughen-sm" x="-5%" y="-20%" width="110%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.04 0.12" numOctaves="2" seed="3" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4"/>
   </filter>
 </svg>
 
 <div id="cursor-dot"></div>
 
 <nav>
-  <div class="wordmark">WILD<span>CANVAS</span></div>
-  <a class="nav-cta" href="#contact">Book a drop</a>
+  <a class="brand" href="#top" aria-label="Wild Canvas, back to top">
+    <img src="images/logo.png" alt="Wild Canvas" width="1275" height="837" onerror="this.outerHTML='&lt;span class=&quot;wordmark&quot;&gt;WILD&lt;span&gt;CANVAS&lt;/span&gt;&lt;/span&gt;'">
+  </a>
+  <a class="btn btn-orange" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20to%20get%20something%20painted." target="_blank" rel="noopener">Message us</a>
 </nav>
 
 <section class="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy" id="hero-copy">
-      <div class="eyebrow-row">
-        <span class="tag"><span class="sw"></span>Bahrain · by appointment</span>
-        <span class="pipe">/</span>
-        <span class="tag">Permanent, hand-painted</span>
-      </div>
       <h1 class="hero-h">
-        <span class="ln spray c-cream">YOUR SOLE.</span>
-        <span class="ln spray c-blue">OUR</span>
-        <span class="ln spray c-orange">CANVAS.</span>
+        <span class="ln"><span class="spray c-cream">PLAIN IS</span></span>
+        <span class="ln"><span class="spray c-blue">JUST</span></span>
+        <span class="ln"><span class="spray c-orange">UNFINISHED.</span></span>
       </h1>
-      <p class="hero-sub">Sneakers, bags and apparel, hand-painted by one artist who used to paint for Nike. One piece at a time. Paint that doesn't wash out — ever.</p>
+      <p class="hero-sub">We paint sneakers, bags, tees, hoodies and more. Send us your idea or an image and we'll paint it on your apparel.</p>
       <div class="hero-ctas">
-        <a class="btn-primary" href="#contact">
-          Start your piece
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a class="btn btn-orange" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20to%20get%20something%20painted." target="_blank" rel="noopener">
+          <svg aria-hidden="true"><use href="#i-wa"/></svg>
+          Message us on WhatsApp
         </a>
-        <a class="btn-ghost" href="#work">See the work</a>
+        <a class="btn-ghost" href="#how">See how it works<svg viewBox="0 0 48 40" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6C22 2 40 10 34 29"/><path d="M34 31l-9-8M34 31l9-8"/></svg></a>
       </div>
     </div>
 
     <div class="hero-stage" id="hero-stage">
-      <!-- Hand-drawn style spray tag mark: an abstract thrown-up tag shape with
-           drip animation, built as inline SVG so it needs no image asset. -->
-      <svg class="tag-mark" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#roughen)">
-          <path d="M120 300 C90 230 140 150 220 130 C260 120 300 90 350 110 C410 134 430 200 410 250 C460 260 470 330 420 365 C450 400 430 450 370 455 C330 458 300 430 260 440 C200 455 140 420 140 370 C110 360 95 330 120 300Z"
-                fill="#2E6CFF"/>
-        </g>
-        <g filter="url(#roughen)">
-          <path d="M260 440 C300 430 330 458 370 455 C430 450 450 400 420 365 C470 330 460 260 410 250 C430 200 410 134 350 110 C390 160 380 220 340 250 C370 290 350 340 300 350 C320 390 290 430 260 440Z"
-                fill="#FF6B1A"/>
-        </g>
-        <g filter="url(#roughen)" opacity="0.9">
-          <path d="M310 170 C330 185 335 210 320 225 C340 235 345 260 325 270" stroke="#F2EEE6" stroke-width="10" stroke-linecap="round"/>
-        </g>
-        <!-- drip streaks -->
-        <rect class="drip d1" x="178" y="330" width="14" height="70" rx="7" fill="#2E6CFF"/>
-        <rect class="drip d2" x="330" y="360" width="12" height="60" rx="6" fill="#FF6B1A"/>
-        <rect class="drip d3" x="250" y="395" width="10" height="50" rx="5" fill="#F2EEE6"/>
-        <rect class="drip d4" x="390" y="300" width="12" height="55" rx="6" fill="#2E6CFF"/>
-      </svg>
+      <img class="hero-photo" src="images/hero.jpg" alt="A hand-painted piece by Wild Canvas" fetchpriority="high" onload="document.querySelector('.hero-grid').classList.add('has-photo')" onerror="this.remove()">
     </div>
   </div>
 </section>
 
+<div class="marquee-wrap" aria-hidden="true">
 <div class="marquee-strip">
   <div class="marquee-track">
     <span>SNEAKERS<i class="dot"></i></span>
     <span class="m-blue">BAGS<i class="dot"></i></span>
-    <span>JACKETS<i class="dot"></i></span>
-    <span class="m-orange">CAPS<i class="dot"></i></span>
-    <span>DENIM<i class="dot"></i></span>
-    <span class="m-blue">SNEAKERS<i class="dot"></i></span>
-    <span>BAGS<i class="dot"></i></span>
-    <span class="m-orange">JACKETS<i class="dot"></i></span>
+    <span>TEES<i class="dot"></i></span>
+    <span class="m-orange">HOODIES<i class="dot"></i></span>
+    <span>PASSPORT COVERS<i class="dot"></i></span>
+    <span class="m-blue">JACKETS<i class="dot"></i></span>
     <span>CAPS<i class="dot"></i></span>
-    <span class="m-blue">DENIM<i class="dot"></i></span>
+    <span class="m-orange">DENIM<i class="dot"></i></span>
+    <span>SNEAKERS<i class="dot"></i></span>
+    <span class="m-blue">BAGS<i class="dot"></i></span>
+    <span>TEES<i class="dot"></i></span>
+    <span class="m-orange">HOODIES<i class="dot"></i></span>
+    <span>PASSPORT COVERS<i class="dot"></i></span>
+    <span class="m-blue">JACKETS<i class="dot"></i></span>
+    <span>CAPS<i class="dot"></i></span>
+    <span class="m-orange">DENIM<i class="dot"></i></span>
   </div>
+</div>
 </div>
 
 <section class="how" id="how">
   <div class="wrap">
     <div class="how-head">
-      <h2 class="spray c-cream">From drop-off<br>to done.</h2>
-      <p>No studio visit required. Bring the piece, tell us the idea, walk away with something nobody else owns.</p>
+      <h2><span class="spray c-cream">From your door,<br>to your door</span></h2>
+      <p>We come to you, paint your piece by hand and bring it back, all from a WhatsApp message</p>
     </div>
-    <div class="how-steps">
-      <div class="how-step">
-        <span class="step-num">01</span>
-        <h3>Drop it off</h3>
-        <p>Bring your sneakers, bag or jacket to the counter, or arrange a pickup. Tell us your idea, or let the artist pitch one.</p>
+    <div class="flow" id="flow">
+      <span class="flow-line" aria-hidden="true"></span>
+      <div class="flow-step">
+        <div class="node"><i>1</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H10l-5 4v-4H4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></div>
+        <h3>Send us your idea</h3>
+        <p>Message us on WhatsApp with your idea or an image of the design you want</p>
       </div>
-      <div class="how-step">
-        <span class="step-num">02</span>
-        <h3>It gets painted</h3>
-        <p>Hand-painted, by hand, with pigment that's built to last through wear, weather and wash — no shortcuts, no prints.</p>
+      <div class="flow-step">
+        <div class="node"><i>2</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l9-5 9 5v9l-9 5-9-5z"/><path d="M3 8l9 5 9-5M12 13v9"/></svg></div>
+        <h3>We pick it up</h3>
+        <p>Our designer collects your piece from your home, so you never have to travel</p>
       </div>
-      <div class="how-step">
-        <span class="step-num">03</span>
-        <h3>Pick up the one-off</h3>
-        <p>Collect a piece that exists nowhere else. We'll text you the second it's ready.</p>
+      <div class="flow-step">
+        <div class="node hot"><i>3</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4l-9.5 9.5"/><path d="M9 12.5c-2.6 0-4 1.8-4 3.8 0 1.2-.7 2.2-2 2.7 3.6 1.4 8-.2 8-4.2 0-.9-.4-1.7-1-2.3"/></svg></div>
+        <h3>We paint it</h3>
+        <p>Every piece is painted by hand, with all the time it needs</p>
+        <span class="days">3 days minimum</span>
+      </div>
+      <div class="flow-step">
+        <div class="node"><i>4</i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-6h6v6"/></svg></div>
+        <h3>Delivered to you</h3>
+        <p>Your one of a kind piece comes back to your door, ready to wear</p>
       </div>
     </div>
   </div>
@@ -464,134 +483,142 @@
   <div class="wrap">
 
     <div class="svc-row">
-      <div class="svc-media"><span class="ph-label">Image placeholder — sneaker artwork</span></div>
+      <div class="svc-media"><img src="images/sneakers.jpg" alt="Hand-painted sneakers by Wild Canvas" loading="lazy" onerror="this.remove()"></div>
       <div class="svc-copy">
         <span class="tag"><span class="sw"></span>Sneakers</span>
-        <h3>Your pair, repainted from scratch.</h3>
-        <p>Full custom coverage or a single accent panel — your call. Every pair is planned around the shoe's own shape before a brush touches it.</p>
-        <div class="svc-price">From <span>BD 30</span></div>
+        <h3>Turn your sneakers into a one of one</h3>
+        <p>Send us your idea or an image and we'll paint it on your pair, from one small detail to a full custom design</p>
+        <a class="btn btn-orange btn-sm" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20a%20quote%20to%20get%20my%20sneakers%20painted." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Get a quote on WhatsApp</a>
       </div>
     </div>
 
     <div class="svc-row">
-      <div class="svc-media"><span class="ph-label">Image placeholder — bag artwork</span></div>
+      <div class="svc-media"><img src="images/bags.jpg" alt="A hand-painted bag by Wild Canvas" loading="lazy" onerror="this.remove()"></div>
       <div class="svc-copy">
         <span class="tag"><span class="sw"></span>Bags</span>
-        <h3>Gucci, canvas, denim — it's your call.</h3>
-        <p>Totes, backpacks and leather goods get the same treatment: hand-laid pigment that moves with the material instead of cracking off it.</p>
-        <div class="svc-price">From <span>BD 40</span></div>
+        <h3>Bags that carry your own artwork</h3>
+        <p>Canvas, leather or denim, tell us what you'd like on it and we'll paint it by hand</p>
+        <a class="btn btn-orange btn-sm" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20a%20quote%20to%20get%20my%20bag%20painted." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Get a quote on WhatsApp</a>
       </div>
     </div>
 
     <div class="svc-row">
-      <div class="svc-media"><span class="ph-label">Image placeholder — apparel artwork</span></div>
+      <div class="svc-media"><img src="images/tees-hoodies.jpg" alt="A hand-painted tee and hoodie by Wild Canvas" loading="lazy" onerror="this.remove()"></div>
       <div class="svc-copy">
-        <span class="tag"><span class="sw"></span>Apparel</span>
-        <h3>Jackets, denim &amp; caps, made yours.</h3>
-        <p>From a back-panel mural to a small sleeve detail — we paint directly onto what you already wear.</p>
-        <div class="svc-price">From <span>BD 25</span></div>
+        <span class="tag"><span class="sw"></span>Tees &amp; hoodies</span>
+        <h3>Your favourite design on a tee or hoodie</h3>
+        <p>Send us an image or an idea and we'll paint it by hand, so nobody else has the same one</p>
+        <a class="btn btn-orange btn-sm" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20a%20quote%20to%20get%20a%20tee%20or%20hoodie%20painted." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Get a quote on WhatsApp</a>
       </div>
     </div>
+
+    <div class="svc-row">
+      <div class="svc-media"><img src="images/passport-covers.jpg" alt="A hand-painted passport cover by Wild Canvas" loading="lazy" onerror="this.remove()"></div>
+      <div class="svc-copy">
+        <span class="tag"><span class="sw"></span>Passport covers</span>
+        <h3>A passport cover that's only yours</h3>
+        <p>Send us your idea and we'll paint a cover you'll love pulling out at the airport</p>
+        <a class="btn btn-orange btn-sm" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20a%20quote%20to%20get%20a%20passport%20cover%20painted." target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Get a quote on WhatsApp</a>
+      </div>
+    </div>
+
 
   </div>
 </section>
 
 <section class="pricing" id="pricing">
-  <div class="wrap">
-    <div class="pricing-head">
-      <h2 class="spray c-cream">What it costs.</h2>
-      <p>Priced the way tattoo work is priced — by size, time and detail, not a flat menu. These are starting points.</p>
+  <div class="wrap price-grid">
+    <div class="price-tag">
+      <small>Starting from</small>
+      <strong>BD 30</strong>
+      <span>Every piece is priced on its own, depending on what you bring us</span>
     </div>
-    <div class="price-grid">
-      <div class="price-card">
-        <div class="p-name">Accent</div>
-        <div class="p-amount">BD 30<small>+</small></div>
-        <ul>
-          <li>One panel or small area</li>
-          <li>Simple design, 1–2 colours</li>
-          <li>Same-day turnaround possible</li>
-        </ul>
-        <a class="p-cta" href="#contact">Start here</a>
-      </div>
-      <div class="price-card anchor">
-        <div class="p-name">Full piece</div>
-        <div class="p-amount">BD 70<small>+</small></div>
-        <ul>
-          <li>Full shoe, bag or back-panel coverage</li>
-          <li>Custom illustration, full palette</li>
-          <li>2–4 day turnaround</li>
-        </ul>
-        <a class="p-cta" href="#contact">Most popular</a>
-      </div>
-      <div class="price-card">
-        <div class="p-name">Commission</div>
-        <div class="p-amount">Quoted</div>
-        <ul>
-          <li>Multi-piece sets or complex concepts</li>
-          <li>Reference-matched artwork</li>
-          <li>Scoped after a quick chat</li>
-        </ul>
-        <a class="p-cta" href="#contact">Get a quote</a>
-      </div>
+    <div class="price-copy">
+      <h2><span class="spray c-cream">Every piece has its own price</span></h2>
+      <p>Prices start from BD 30 and go up depending on the piece and the design, so send us a photo and your idea and we'll give you a quote</p>
+      <ul class="factors">
+        <li><b>Item</b><span>A tee, a bag and a pair of sneakers each take a different amount of work</span></li>
+        <li><b>Size</b><span>The bigger the piece or the artwork, the more painting it needs</span></li>
+        <li><b>Detail</b><span>More colours and finer details take more care</span></li>
+        <li><b>Time</b><span>The hours at the bench and the amount of paint add up</span></li>
+      </ul>
+      <a class="btn btn-orange" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20Here%27s%20my%20idea%2C%20how%20much%20would%20it%20be%3F" target="_blank" rel="noopener">Get your price on WhatsApp</a>
     </div>
   </div>
 </section>
 
 <section class="contact" id="contact">
-  <div class="wrap contact-inner">
-    <h2 class="spray c-cream">Let's paint<br>something.</h2>
-    <p>Drop your piece off, or message us your idea first — we'll tell you what it'll take.</p>
+  <div class="wrap"><div class="contact-inner">
+    <h2><span class="spray c-cream">Let's paint<br>something.</span></h2>
+    <p>Message us your idea or a photo of the piece and we'll tell you what it'll take</p>
     <div class="contact-row">
-      <a class="btn-dark" href="mailto:hello@wildcanvas.bh">Email us</a>
-      <span class="contact-meta">hello@wildcanvas.bh · Bahrain</span>
+      <a class="btn btn-dark" href="https://wa.me/97338025252?text=Hi%20Wild%20Canvas!%20I%27d%20like%20to%20get%20something%20painted." target="_blank" rel="noopener">
+        <svg aria-hidden="true"><use href="#i-wa"/></svg>
+        WhatsApp us
+      </a>
+      <a class="btn btn-line" href="https://instagram.com/wildcanvas.bh" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
+        @wildcanvas.bh
+      </a>
     </div>
-  </div>
+  </div></div>
 </section>
 
 <footer>
   <span>© 2026 Wild Canvas</span>
-  <span>Hand-painted. Never washes out.</span>
+  <a href="privacy.html">Privacy policy</a>
 </footer>
 
 <script>
-/* ===== custom cursor: paint drip ===== */
+/* paint-drip cursor, mouse devices only */
 (function(){
+  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const dot = document.getElementById('cursor-dot');
-  let mx=0,my=0;
-  let lastDrip=0;
+  let lastDrip = 0;
   window.addEventListener('pointermove', (e)=>{
-    mx=e.clientX; my=e.clientY;
-    dot.style.left=mx+'px'; dot.style.top=my+'px';
-    const now=performance.now();
-    if(now-lastDrip>100){
-      lastDrip=now;
-      const d=document.createElement('div');
-      d.className='cursor-drip';
-      d.style.left=mx+'px'; d.style.top=my+'px';
-      d.style.background = Math.random()>0.5 ? 'var(--blue)' : 'var(--orange)';
-      d.style.transform = `translate(-50%,-50%) rotate(${Math.random()*360}deg)`;
+    const mx = e.clientX, my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    const now = performance.now();
+    if(now - lastDrip > 100){
+      lastDrip = now;
+      const d = document.createElement('div');
+      d.className = 'cursor-drip';
+      d.style.left = mx + 'px'; d.style.top = my + 'px';
+      d.style.background = Math.random() > 0.5 ? 'var(--blue)' : 'var(--orange)';
       document.body.appendChild(d);
-      let op=0.6, sc=1;
-      const fade=()=>{
-        op-=0.035; sc+=0.05;
-        d.style.opacity=op;
-        d.style.transform=`translate(-50%,-50%) scale(${sc}) rotate(45deg)`;
-        if(op>0) requestAnimationFrame(fade); else d.remove();
+      let op = 0.6, sc = 1;
+      const fade = ()=>{
+        op -= 0.035; sc += 0.05;
+        d.style.opacity = op;
+        d.style.transform = 'translate(-50%,-50%) scale(' + sc + ') rotate(45deg)';
+        if(op > 0) requestAnimationFrame(fade); else d.remove();
       };
       requestAnimationFrame(fade);
     }
   }, {passive:true});
 })();
 
-/* ===== hero load-in ===== */
+/* process line draws itself when it scrolls into view */
+(function(){
+  const flow = document.getElementById('flow');
+  if(!flow) return;
+  if(!('IntersectionObserver' in window)){ flow.classList.add('go'); return; }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ flow.classList.add('go'); io.disconnect(); } });
+  }, {threshold:0.3});
+  io.observe(flow);
+})();
+
+/* hero load-in */
 window.addEventListener('DOMContentLoaded', ()=>{
   const copy = document.getElementById('hero-copy');
   const stage = document.getElementById('hero-stage');
   requestAnimationFrame(()=>{
     copy.style.transition = 'opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)';
     stage.style.transition = 'opacity 1.1s cubic-bezier(.2,.7,.2,1)';
-    setTimeout(()=>{ copy.style.opacity=1; copy.style.transform='translateY(0)'; }, 120);
-    setTimeout(()=>{ stage.style.opacity=1; }, 320);
+    setTimeout(()=>{ copy.style.opacity = 1; copy.style.transform = 'translateY(0)'; }, 120);
+    setTimeout(()=>{ stage.style.opacity = 1; }, 320);
   });
 });
 </script>
